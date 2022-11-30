@@ -46,7 +46,7 @@ impl User {
 
 /// Shorthand syntax (still on p. 85): Notice that the two following functions are equivalent.
 fn no_shorthand(email: String, username: String) -> User {
-    // Clippy or your IDE will complain because you don't need to repeat email and username.
+    // Clippy or your IDE might complain because you don't need to repeat email and username.
     User {
         email: email,
         username: username,
@@ -84,7 +84,8 @@ struct SuperUser {
     permission_level: u16,
 }
 
-/// It would be nice if I could do this, but I can't :(
+// It would be nice if I could do this, but I can't :(
+// There is an [RFC](https://rust-lang.github.io/rfcs/2528-type-changing-struct-update-syntax.html).
 // fn super_user_from_user(user: User) -> SuperUser {
 //     SuperUser{
 //         permission_level: 2,
@@ -173,3 +174,59 @@ fn use_borrowed_data_struct() {
 }
 
 // For pp. 87-96 (end of chapter), just flip through and talk about things you've highlighted.
+
+// Display and Debug p. 91
+// Instructions: for this example show the compiler error, then implement Debug and Display manually
+// then use the derive macro for Debug
+
+struct PrintMe {
+    first_word: String,
+    second_word: String,
+}
+
+// This doesn't compile unless we implement Debug and Display
+// fn print_me() {
+//     let value = PrintMe {
+//         first_word: "Hello".to_string(),
+//         second_word: "World".to_string(),
+//     };
+//     // Uses Display
+//     println!("{}", value);
+//
+//     // Uses Debug
+//     println!("{:?}", value);
+// }
+
+// Different selfs
+
+pub struct WrappedString {
+    value: String,
+}
+
+impl WrappedString {
+    /// Capitalized `Self` represent the type, i.e. `WrappedString`.
+    pub fn new<S: Into<String>>(value: S) -> Self {
+        Self {
+            value: value.into(),
+        }
+    }
+
+    /// `&mut self` does a mutable borrow of the instance.
+    pub fn mutate(&mut self) {
+        self.value.push_str(" foo");
+    }
+
+    /// `&self` does an immutable borrow of the instance.
+    pub fn print(&self) {
+        println!("{}", self.value)
+    }
+
+    /// `self` "consumes" the instance. i.e. destroys it by borrowing it.
+    fn be_like_a_builder(self) -> Self {
+        Self {
+            value: format!("{} bar", self.value),
+        }
+    }
+}
+
+// TODO - demonstrate usage?
