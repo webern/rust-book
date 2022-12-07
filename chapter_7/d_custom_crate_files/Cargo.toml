@@ -1,0 +1,12 @@
+[package]
+name = "d_custom_crate_files"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "weird_file_location_1"
+path = "./weird_file_location_1.rs"
+
+[lib]
+name = "weird_file_location_2"
+path = "./weird_file_location_2.rs"

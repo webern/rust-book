@@ -4,4 +4,9 @@ members = [
     "chapter_4",
     "chapter_5",
     "chapter_6",
+    "chapter_7/a_normal_binary",
+    "chapter_7/b_normal_library",
+    "chapter_7/c_multiple_crates",
+    "chapter_7/d_custom_crate_files",
+    "chapter_7/e_pub_vs_private",
 ]

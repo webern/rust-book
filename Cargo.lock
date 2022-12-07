@@ -3,6 +3,18 @@
 version = 3
 
 [[package]]
+name = "a_standard_binary"
+version = "0.1.0"
+
+[[package]]
+name = "b_standard_library"
+version = "0.1.0"
+
+[[package]]
+name = "c_multiple_crates"
+version = "0.1.0"
+
+[[package]]
 name = "chapter_4"
 version = "0.1.0"
 
@@ -12,4 +24,12 @@ version = "0.1.0"
 
 [[package]]
 name = "chapter_6"
+version = "0.1.0"
+
+[[package]]
+name = "d_custom_crate_files"
+version = "0.1.0"
+
+[[package]]
+name = "e_pub_vs_private"
 version = "0.1.0"
