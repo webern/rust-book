@@ -9,4 +9,5 @@ members = [
     "chapter_7/c_multiple_crates",
     "chapter_7/d_custom_crate_files",
     "chapter_7/e_pub_vs_private",
+    "chapter_9",
 ]
