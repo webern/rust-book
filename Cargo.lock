@@ -21,6 +21,10 @@ name = "c_multiple_crates"
 version = "0.1.0"
 
 [[package]]
+name = "chapter_10a"
+version = "0.1.0"
+
+[[package]]
 name = "chapter_4"
 version = "0.1.0"
 
