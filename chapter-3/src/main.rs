@@ -152,3 +152,4 @@ const NO_DOCUMENTATION: () = ();
 ///
 /// Then extra note here: if-let
 /// https://doc.rust-lang.org/book/ch03-04-comments.html#comments
+fn foo() {}

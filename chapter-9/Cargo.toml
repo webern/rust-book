@@ -1,6 +1,8 @@
 [package]
-name = "chapter_10c"
+name = "chapter-9"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1"
+snafu = "0.7"

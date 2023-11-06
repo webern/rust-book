@@ -328,6 +328,8 @@ mod integ_discussion {
 /// Pull that out of your function and make it pure.
 ///
 mod pure_functions {
+    use std::path::Path;
+
     struct Config;
 
     /// BAD: this is hard to test
