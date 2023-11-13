@@ -14,11 +14,32 @@ fn main() {
     use_the_empty_struct();
 }
 
+/// ```
+///
+/// ```
 struct User {
     email: String,
     username: String,
     active: bool,
     sign_in_count: u64,
+}
+
+/// The following struct is actually no different than this tuple other than labeling the data.
+fn tuples_are_like_structs() {
+    let user = (
+        String::from("foo@bar.com"),
+        String::from("foobar"),
+        false,
+        0,
+    );
+
+    // The above is the same as the following, but the following struct is easier to understand.
+    let user = User {
+        email: String::from("foo@bar.com"),
+        username: String::from("foobar"),
+        active: false,
+        sign_in_count: 0,
+    };
 }
 
 /// [p. 85]:(https://doc.rust-lang.org/book/ch05-01-defining-structs.html#defining-and-instantiating-structs)
@@ -94,7 +115,7 @@ struct SuperUser {
 // }
 
 // Tuple Structs
-// [p. 86](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax)
+// [p. 86](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types)
 
 /// A point consisting of X, Y and Z
 struct Point(u64, u64, u64);
@@ -173,8 +194,6 @@ fn use_borrowed_data_struct() {
     println!("{} {}", borrowed_data.email, borrowed_data.username)
 }
 
-// For pp. 87-96 (end of chapter), just flip through and talk about things you've highlighted.
-
 // Display and Debug p. 91
 // Instructions: for this example show the compiler error, then implement Debug and Display manually
 // then use the derive macro for Debug
@@ -221,12 +240,12 @@ impl WrappedString {
         println!("{}", self.value)
     }
 
-    /// `self` "consumes" the instance. i.e. destroys it by borrowing it.
+    /// `self` "consumes" the instance. i.e. destroys it by moving it into the function.
+    /// i.e. `wrapped_string.be_like_a_builder()` is similar to `be_like_a_builder(wrapped_string)`
+    /// taking its input by `move` (i.e. not by reference).
     fn be_like_a_builder(self) -> Self {
         Self {
             value: format!("{} bar", self.value),
         }
     }
 }
-
-// TODO - demonstrate usage?
