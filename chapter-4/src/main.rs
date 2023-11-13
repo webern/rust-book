@@ -20,22 +20,26 @@ fn main() {
 /// - What problem does Rust's ownership concept try to solve?
 /// (Keeping track of what parts of code are using what data on the heap, minimizing the amout of
 /// duplicate data on the heap, cleaning up unused data on the heap.
-///
+
+/// Rust Ownership Rules: https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ownership-rules
+/// Each value in Rust has **an owner**.
+/// There can only be **one owner at a time**.
+/// When the owner goes out of scope, **the value will be dropped**.
 mod what_is_ownership {
     /// [p. 62](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#the-string-type):
-    /// - Where is the data stored for Rust's `String` type?
-    /// - Where is a string literal stored?
-    /// - When is the memory allocated by `String` automatically freed and given back to the
-    ///   operating system?
+    /// - What are the differences between a string literal and a `String` type in Rust?
+    /// - When is the a `String`'a memory automatically freed?
     mod the_string_type {}
 
     /// [p. 64](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#memory-and-allocation):
     /// - What is the name of the special function that Rust calls automatically when a variable
     ///   goes out of scope?
-    /// - What is this called in C++?
+    /// - What is this function called in C++?
+    /// - What is this programming principle called (i.e. what is RAII)?
     ///
     /// [p. 65](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move)
-    /// What is happening on the stack and on the heap in this code?
+    /// What is happening on the stack and on the heap in this code? Is `s1` usable after the
+    /// assignment to s2?
     /// ```
     /// let s1 = String::from("hello");
     /// let s2 = s1;
@@ -47,6 +51,12 @@ mod what_is_ownership {
     /// What choice has Rust made about "deep" copies? (Bottom of p. 66)
     /// Enter `Clone` and `fn clone() -> Self`
     ///
+    /// What happens in this code? Is x1 usable after the assignment to x2? Why?
+    /// ```
+    /// let x1 = 42;
+    /// let x2 = x1;
+    /// ```
+    ///
     /// [p. 67](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone):
     /// How is it that we don't need to call clone to get copies of integers and other primitives?
     /// What is special about these primitives that make them so quick to copy?
@@ -54,6 +64,12 @@ mod what_is_ownership {
     fn memory_and_allocation() {
         // TODO - demo Clone and Copy if there's time
     }
+
+    // Take a look at these two programs and talk through them:
+    // https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#return-values-and-scope
+
+    // Take a look at this program and talk through it:
+    // https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ownership-and-functions
 }
 
 /// [p. 70](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html)
@@ -71,14 +87,17 @@ mod references_and_borrowing {
         println!("The length of '{}' is {}.", s1, len);
     }
 
+    /// Note `&str` is better then `&String` because it can accept string literals as well.
     fn calculate_length(s: &String) -> usize {
         s.len()
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /// The process of creating a reference in Rust is called **BORROWING**.
+    ///
     /// [p. 71](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html):
-    /// The reference is immutable.
+    /// The references are immutable by default.
     fn program_2() {
         let s = String::from("hello");
         change(&s);
@@ -105,9 +124,32 @@ mod references_and_borrowing {
 
     /// # Mutable Reference Examples
     /// [p. 73](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references)
+    ///
+    /// **Rust can prevent data races at compile time!!!**
+    ///
     /// - What is a data race?
     /// - How does Rust prevent data races?
     /// - How many immutable references can you have to one piece of data in one scope?
+    ///
+    /// > Mutable references have one big restriction: if you have a mutable reference to a value,
+    /// > you can have no other references to that value. This code that attempts to create two
+    /// > mutable references to s will fail:
+    ///
+    /// First look at this and talk through it:
+    ///
+    /// ```no_compile
+    /// let mut s = String::from("hello");
+    ///
+    /// let r1 = &mut s;
+    /// let r2 = &mut s;
+    ///
+    /// println!("{}, {}", r1, r2);
+    /// ```
+    ///
+    /// > Note that a reference’s scope starts from where it is introduced and continues through the
+    /// > last time that reference is used. For instance, this code will compile because the last
+    /// > usage of the immutable references, the println!, occurs before the mutable reference is
+    /// > introduced:
     fn ok_mut_ref_goes_out_of_scope() {
         let mut s = String::from("hello");
 
@@ -194,7 +236,7 @@ mod slice_types {
         println!("{}", hello);
         println!("{}", world);
 
-        // beware of unicode!
+        // beware of unicode! This Panics (yikes)!
         // let s = String::from("hell🍺 world");
         //
         // let hello = &s[0..5];
@@ -203,7 +245,7 @@ mod slice_types {
         // println!("{}", world);
     }
 
-    /// What is &str better than &String in function signatures.
+    /// Why is &str better than &String in function signatures.
     const CONSTANT: &str = "hello world";
 
     fn bad_function_signature(s: &String) {
