@@ -82,6 +82,7 @@ mod everybody_panic {
     use tempfile::TempDir;
 
     #[test]
+    #[should_panic]
     fn panic_is_ok() {
         let t = TempDir::new().expect("this panic is fine");
         assert_eq!(
@@ -101,7 +102,7 @@ mod everybody_panic {
 /// ## Example
 ///
 /// ```
-/// use chapter_11a::doc_test_example::MyType;
+/// use chapter_11::doc_test_example::MyType;
 /// let foo = MyType::new("balloon");
 /// assert_eq!("balloon is a thing that I say when I am thinking about balloon", foo.ruminate())
 /// ```
@@ -135,7 +136,7 @@ pub mod doc_test_example {
 /// ## Example
 ///
 /// ```no_run
-/// use chapter_11a::compile_only::first_word_on_page;
+/// use chapter_11::compile_only::first_word_on_page;
 /// let first_word = first_word_on_page("https://example.com");
 /// ```
 ///
