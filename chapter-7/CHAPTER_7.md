@@ -14,3 +14,14 @@ Crate vs. Package
 
 Thank a look at the modules cheat sheet:
 https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html#modules-cheat-sheet
+
+To do the Rustlings exercises:
+
+```shell
+git clone git@github.com:webern/rust-book.git
+cd rust-book
+cd chapter-7/rustlings
+cargo run --package rustlings-chapter-7 -- watch
+```
+
+Do the exercises in **`10_modules`**.

@@ -6,15 +6,16 @@ members = [
     "chapter-4",
     "chapter-5",
     "chapter-6",
+    "chapter-6/rustlings",
     "chapter-7/a_normal_binary",
     "chapter-7/b_normal_library",
     "chapter-7/c_multiple_crates",
     "chapter-7/d_custom_crate_files",
     "chapter-7/e_pub_vs_private",
+    "chapter-7/rustlings",
     "chapter-9",
     "chapter-10a",
     "chapter-10b",
     "chapter-10c",
     "chapter-11",
-    "chapter-6/rustlings"
 ]
