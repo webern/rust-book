@@ -4,14 +4,14 @@
 mod a {
     fn private() {}
 
-    // This is not allowed. The "parent" cannot use the "child's" private symbols.
     // fn nope() {
+    //     // This is not allowed. The "parent" cannot use the "child's" private symbols.
     //     crate::a::b::private();
     // }
 
     mod b {
-        /// This is allowed. The "child" can use the "parent's" private symbols.
         fn private() {
+            // This is allowed. The "child" can use the "parent's" private symbols.
             crate::a::private()
         }
     }
@@ -45,7 +45,7 @@ pub mod some_module {
 }
 
 /// Renaming imports
-mod rename_a_function {
+mod rename_a_symbol {
     use crate::some_module::ClashingName as Renamed;
 
     fn some_function() {
@@ -55,11 +55,24 @@ mod rename_a_function {
 
 pub mod some_trait {
     pub trait ClashingTrait {
-        fn foo();
+        fn foo(&self) {}
     }
 }
+
+struct MyFoo;
+
+impl some_trait::ClashingTrait for MyFoo {}
+
 mod rename_a_trait {
+    use crate::MyFoo;
     // sometimes you just need to bring a trait into a scope and don't care about the name. If the
     // name clashes with something, you can do this.
+    //
+    // Also note that the trait cannot be used without this.
     use crate::some_trait::ClashingTrait as _;
+
+    fn use_clashing_name_trait() {
+        let x = MyFoo;
+        x.foo();
+    }
 }

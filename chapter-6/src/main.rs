@@ -47,10 +47,10 @@ mod enums_with_and_without_data {
     impl DataEnum {
         pub fn explode(&self) {
             match self {
-                DataEnum::Empty => todo!(),
-                DataEnum::Point(Point { x: 0, .. }) => todo!(),
-                DataEnum::UnnamedStruct { x: 0, .. } => todo!(),
-                _ => todo!(),
+                DataEnum::Empty => todo!("Empty"),
+                DataEnum::Point(Point { x: 0, .. }) => todo!("x is zero"),
+                DataEnum::UnnamedStruct { x: 0, .. } => todo!("Unnamed x is zero"),
+                _ => todo!("Sometime else"),
             }
         }
     }
@@ -70,7 +70,7 @@ fn option_unwraps() {
     let not_null: Option<u8> = Some(0u8);
 
     // getting the value from an option.
-    // This is panic!
+    // This will panic!
     let x = null.unwrap();
 
     // This will give the default of the internal type if the option is `None` (in this case 0)
@@ -81,7 +81,7 @@ fn option_unwraps() {
 
     // This will call the provided lambda function if the option is `None`.
     let x = null.unwrap_or_else(|| {
-        // do some expensive calculation to come up with the default
+        // use unwrap_or_else if you need to allocate or run a function
         42
     });
 }
@@ -145,7 +145,7 @@ fn exhaustive_matches() {
     // `Letters::` in front of the `A`. I'm writing `A` instead of `Letter::A` and the compiler
     // thinks it is a variable named `A`.
     //
-    // This will **ALWAYS** print "A"/
+    // This will **ALWAYS** print "A"
     // Fortunately the compiler warns me that the _ => case is unreachable.
     // match letter {
     //     A => println!("A"),
@@ -170,7 +170,7 @@ fn patterns_that_bind_to_values() {
         _ => println!("I need the catch-all because I haven't covered all values"),
     }
 
-    // We can also assign whatever is "in" the variant to a variable:
+    // We can also assign whatever is in the variant to a variable:
     match value {
         Value::I(i) => println!("{}", i),
         Value::S(s) => println!("{}", s),
@@ -193,3 +193,15 @@ fn if_let() {
         }
     }
 }
+
+/// To do the rustlings exercises, cd into chapter-6/rustlings and run it like so:
+///
+/// ```shell
+/// git clone git@github.com:webern/rust-book.git
+/// cd rust-book
+/// cd chapter-6/rustlings
+/// cargo run --package rustlings-chapter-6 -- watch
+/// ```
+/// Then do the exercises in **`08_enums`**.
+///
+mod rustlings {}
