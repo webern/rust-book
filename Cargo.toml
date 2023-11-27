@@ -13,6 +13,8 @@ members = [
     "chapter-7/d_custom_crate_files",
     "chapter-7/e_pub_vs_private",
     "chapter-7/rustlings",
+    "chapter-8",
+    "chapter-8/rustlings",
     "chapter-9",
     "chapter-10a",
     "chapter-10b",
