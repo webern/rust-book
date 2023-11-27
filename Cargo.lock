@@ -176,6 +176,9 @@ version = "0.1.0"
 [[package]]
 name = "chapter-8"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+]
 
 [[package]]
 name = "chapter-9"
