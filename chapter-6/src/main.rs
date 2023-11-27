@@ -205,3 +205,26 @@ fn if_let() {
 /// Then do the exercises in **`08_enums`**.
 ///
 mod rustlings {}
+
+/// This is a question that came up during the class.
+/// Q: Can you implement `Default` for a Struct?
+/// A: Yes you can!
+///
+struct Foo {
+    my_thing: String,
+}
+
+impl Default for Foo {
+    fn default() -> Self {
+        Self {
+            my_thing: "Foo".to_string(),
+        }
+    }
+}
+
+/// Also if all of the fields of your struct implement `Default` then you can use a built-in macro
+/// to implement it for you.
+#[derive(Default)]
+struct AutoDefault {
+    foo: Foo,
+}
