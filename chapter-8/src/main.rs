@@ -94,6 +94,8 @@ fn multiple_types_in_vectors() {
     vec.push(Box::new(String::from("Hello")) as Box<dyn Any>);
     vec.push(Box::new(0u128) as Box<dyn Any>);
 
+    let item_id = (&*vec.get(1).unwrap()).type_id();
+
     for item in &vec {
         if let Some(value) = item.downcast_ref::<String>() {
             println!("The trimmed String is {}", value.trim_end().trim_start());
@@ -192,7 +194,56 @@ fn hash_maps() -> Result<()> {
             let count = map.entry(word).or_insert(0);
             *count += 1;
         }
+
+        // also works
+        // TODO - check this to be sure
+        for word in text.split_whitespace() {
+            let count = map.get(word).cloned().unwrap_or_default();
+            map.insert(word, count + 1);
+        }
     }
 
     Ok(())
+}
+
+// TODO - maybe move this to the session on lifetimes.
+/// This question came up during at the end.
+///
+/// Q: Why is it that sometimes you can get away with passing a ref to a temporary to a function but
+///    other times you can't.
+/// A: When the compiler knows that the lifetime of the referenced object only needs to be as long
+///    as the function, i.e. your temp does not need to outlive the function's scope, the compiler
+///    allows this.
+mod ref_to_temp {
+    fn returns_an_owned() -> String {
+        String::from("blah")
+    }
+
+    fn takes_and_returns_ref(x: &str) -> &str {
+        x.trim_end()
+    }
+
+    /// This is allowed because nobody ever tries to use the variable `slice`, so the compiler knows
+    /// that the referenced object only needs to live as long as the `takes_and_returns_ref`
+    /// function body.
+    fn this_works() {
+        let slice = takes_and_returns_ref(&returns_an_owned());
+    }
+
+    /// This is not allowed because the compiler sees that `slice` is used later which means the
+    /// temp object returned by `returns_an_owned` needs to live longer than the
+    /// `takes_and_returns_ref` function body.
+    fn this_does_not_compile() {
+        let slice = takes_and_returns_ref(&returns_an_owned());
+        // Uncomment this and compilation will fail.
+        // println!("{slice}");
+    }
+
+    /// This is how you fix `does_not_compile`. You need to assign the result of `returns_an_owned`
+    /// to a variable that lives long enough.
+    fn this_fixes_the_problem() {
+        let s = returns_an_owned();
+        let slice = takes_and_returns_ref(&s);
+        println!("{slice}");
+    }
 }
