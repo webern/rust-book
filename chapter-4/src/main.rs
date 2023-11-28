@@ -17,8 +17,8 @@ fn main() {
 /// - What is the advantage of having data on the stack instead of the heap?
 ///
 /// [p 61](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ownership-rules)
-/// - What problem does Rust's ownership concept try to solve?
-/// (Keeping track of what parts of code are using what data on the heap, minimizing the amout of
+/// - What problem does Rust's ownership model try to solve?
+/// (Keeping track of what parts of code are using what data on the heap, minimizing the amount of
 /// duplicate data on the heap, cleaning up unused data on the heap.
 
 /// Rust Ownership Rules: https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html#ownership-rules
