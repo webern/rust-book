@@ -1,8 +1,42 @@
 #![allow(dead_code, unused_variables, unused_mut, unused_imports)]
 
-use crate::mane::ManeError;
+use std::panic::catch_unwind;
+pub mod error_libraries;
+pub mod helpers;
+pub mod mane_error;
 
-/// # Getting Help from the Compiler (p. 156)
+/// ## Panic vs Error
+///
+/// - Panic: will print a failure message, unwind, clean up the stack, and quit the program.
+/// - Error: a type (trait actually) used by convention to report a problem to the calling function.
+///
+/// You can actually catch a panic, but shouldn't. Here's what the [documentation] says:
+/// [documentation]: https://doc.rust-lang.org/std/panic/fn.catch_unwind.html
+///
+/// > It is currently undefined behavior to unwind from Rust code into foreign code, so this
+/// > function is particularly useful when Rust is called from another language (normally C). This
+/// > can run arbitrary Rust code, capturing a panic and allowing a graceful handling of the error.
+/// >
+/// > > It is not recommended to use this function for a general try/catch mechanism. The Result
+/// > type is more appropriate to use for functions that can fail on a regular basis. Additionally,
+/// > this function is not guaranteed to catch all panics, see the “Notes” section below.
+///
+/// Run `p01_panic_vs_error` to demonstrate what this does.
+pub fn panic_vs_error() {
+    // Technically you can catch a panic, but it is not recommended to do so. This mechanism is used
+    // for special cases such as Rust code that is being called from C.
+    match catch_unwind(|| panic!("Oh no")) {
+        Ok(()) => println!("catch_unwind succeeded"),
+        Err(_) => println!("catch_unwind encountered a panic"),
+    }
+}
+
+/// ## Getting Help from the Compiler (p. 156)
+///
+/// This is a side note, but sometimes is required that you know what type a function is returning
+/// and it's not easy to figure it out. This can happen when using `Sanfu`'s `source` field, for
+/// example.
+///
 /// You can use this trick when you don't know the type of something. Annotate a `let` statement
 /// with some type, even though you know it is wrong, then compile. The compiler will tell you
 /// what the actual type is.
@@ -17,8 +51,11 @@ mod type_discovery_trick {
 
     /// I can use the compiler to tell me what the exact type is.
     fn function() {
+
         // What if I need to annotate this type and don't know that type is being returned?
-        let iter = what_type_does_this_return();
+        // Uncomment this and buld `lib.rs` to demonstrate.
+        //
+        // let iter: () = what_type_does_this_return();
     }
 }
 
@@ -28,10 +65,16 @@ mod custom_error {
     use std::error::Error;
     use std::fmt::{Display, Formatter};
 
-    // Technically speaking, anything can be used as an error.
-    fn dumb_error_type() -> Result<(), u64> {
-        // This is a dumb error type because it is not idiomatic. What do we do with `1`?
-        Err(1)
+    /// Technically speaking, anything can be used as an error. This is non idiomatic, though,
+    /// because callers expect the error type to implement `Error`. `String` does *not* implement
+    /// `Error`.
+    ///
+    /// Why?
+    ///
+    /// Probably because stringly-typed programming is considered harmful. See `Go` errors for an
+    /// example of this. `Go` programmers often have to parse strings to handle errors.
+    fn dumb_error_type() -> Result<(), String> {
+        Err(String::from("Oh no!"))
     }
 
     /// Instead error types should implement the std library `Error` trait. This is still a weird
@@ -63,9 +106,9 @@ mod custom_error {
         /// error held in `source`.
         message: String,
 
-        /// The underlying error that is being wrapped by `BetterError` if one exists. Note that it
+        /// The underlying error that is being wrapped by `BetterError` (if present). Note that it
         /// is very common and idiomatic to require error types to also implement `Send` and `Sync`.
-        /// Without `Send` and `Sync` users will struggle to use your library in `async` or multy-
+        /// Without `Send` and `Sync` users will struggle to use your library in `async` or multi-
         /// threaded applications. Using `Box<dyn>` allows us to hold a pointer to any type of
         /// error that implements these traits.
         source: Option<Box<dyn std::error::Error + Send + Sync>>,
@@ -88,7 +131,7 @@ mod custom_error {
         /// this mechanism, a chain of wrapping errors is built up that can serve as a pseudo-
         /// stack-trace.
         fn source(&self) -> Option<&(dyn Error + 'static)> {
-            // This is ugly and took by a long time to figure out, but we are just casting our
+            // This is ugly and took me a long time to figure out, but we are just casting our
             // `source` to the type that is defined by the `Error` trait.
             self.source.as_ref().map(|e| e.as_ref() as &(dyn Error))
         }
@@ -96,10 +139,13 @@ mod custom_error {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /// An even better Error would give the user some enum to explain the error condition.
+    /// An even better Error would give the user some enum to explain the error condition. It is
+    /// idiomatic to call this `Kind` or `ErrorKind` after `std::io::ErrorKind`.
+    ///
+    /// https://doc.rust-lang.org/std/io/enum.ErrorKind.html
     #[derive(Debug, Clone, Copy)]
     pub enum Kind {
-        /// The universe collapse.
+        /// The universe collapsed.
         Implosion,
         /// The universe didn't collapse.
         HeatDeath,
@@ -110,6 +156,35 @@ mod custom_error {
         message: String,
         kind: Kind,
         source: Option<Box<dyn std::error::Error + Send + Sync>>,
+    }
+
+    /// Here is a function that returns a `BestError` so we can see how to use it.
+    fn simulate_universe() -> std::result::Result<(), BestError> {
+        // Try to do something that results in an error.
+        let data = std::fs::read_to_string("/heat-death/signal/file");
+        let err = data.err().unwrap();
+        // Since we didn't find the heat death signal file, we know the universe imploded.
+        Err(BestError {
+            message: "The universe experience an implosion situation".to_string(),
+            kind: Kind::Implosion,
+            source: Some(Box::new(err)),
+        })
+    }
+
+    /// This function handles an error received from `simulate_universe` by checking the `Kind`
+    /// property.
+    fn handle_error() {
+        match simulate_universe() {
+            Ok(_) => {}
+            Err(e) => match e.kind {
+                Kind::Implosion => {
+                    // Restart the universe with a new big bang.
+                }
+                Kind::HeatDeath => {
+                    // Nothing to do.
+                }
+            },
+        }
     }
 
     impl BestError {
@@ -168,7 +243,7 @@ mod question_mark_into_call {
     impl From<ErrorTypeOne> for ErrorTypeTwo {
         fn from(e: ErrorTypeOne) -> Self {
             // pretend there is some real transformation here
-            Self
+            ErrorTypeTwo
         }
     }
 
@@ -188,39 +263,6 @@ mod question_mark_into_call {
     // fn returns_error_type_three() -> Result<(), ErrorTypeThree> {
     //     Ok(returns_error_type_one()?)
     // }
-}
-
-/// # Errors and the `main` Function (p. 164)
-/// The main function will show an error using `Debug`, which is too bad.
-/// This is why we usually catch the error from a `run` function and display it with `eprintln!()`.
-fn main() -> Result<(), ManeError> {
-    mane::run_program()
-}
-
-mod mane {
-    use std::error::Error;
-    use std::fmt::{Debug, Display, Formatter};
-
-    pub fn run_program() -> Result<(), ManeError> {
-        println!("Chapter 9!");
-        Err(ManeError)
-    }
-
-    pub struct ManeError;
-
-    impl Display for ManeError {
-        fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-            Display::fmt("error is displayed", f)
-        }
-    }
-
-    impl Debug for ManeError {
-        fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-            Display::fmt("error is debugged", f)
-        }
-    }
-
-    impl Error for ManeError {}
 }
 
 /// # Custom Types for Validation (p. 167)
@@ -317,8 +359,5 @@ mod snafu_good {
     }
 }
 
-// TODO - # Demo Anyhow
-
-// TODO - # Demo thiserror
-
-// TODO - # Demo Eyre
+/// Next, go to `error_libraries`!
+mod go_to_error_libraries {}
