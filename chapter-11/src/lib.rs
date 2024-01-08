@@ -1,5 +1,6 @@
 #![allow(dead_code, unused_variables, unused_mut, unused_imports)]
 
+/// Rant 1?
 /// - tests should be isolated. running one test should not affect another test.
 /// - tests should not leave state behind. clean up after yourself.
 mod isolated {
@@ -329,6 +330,7 @@ mod integ_discussion {
 /// Pull that out of your function and make it pure.
 ///
 mod pure_functions {
+    use std::io::Read;
     use std::path::Path;
 
     struct Config;
@@ -345,5 +347,9 @@ mod pure_functions {
         std::fs::read_to_string(path.as_ref()).unwrap();
         // do the parsing
         Config {}
+    }
+
+    fn read_config_pure<R: Read>(conf: R) -> Config {
+        todo!()
     }
 }
