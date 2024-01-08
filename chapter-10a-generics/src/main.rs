@@ -7,6 +7,29 @@ fn main() {
 
 /// # Generics in Functions p. 174
 mod function_generics {
+
+    fn largest_i32(list: &[i32]) -> i32 {
+        // Note this can panic, don't do this in production code.
+        let mut largest = list[0];
+        for &item in list {
+            if item > largest {
+                largest = item;
+            }
+        }
+        largest
+    }
+
+    fn largest_u64(list: &[u64]) -> u64 {
+        // Note this can panic, don't do this in production code.
+        let mut largest = list[0];
+        for &item in list {
+            if item > largest {
+                largest = item;
+            }
+        }
+        largest
+    }
+
     /// Example in book. I've included the traits necessary for it to compile.
     fn largest<T>(list: &[T]) -> T
     where

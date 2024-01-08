@@ -1,6 +1,7 @@
 [package]
-name = "chapter-10b"
+name = "chapter-10b-traits"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+chapter-10-traits-lib = { path = "../chapter-10-traits-lib" }

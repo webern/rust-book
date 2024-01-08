@@ -16,6 +16,7 @@ members = [
     "chapter-8",
     "chapter-8/rustlings",
     "chapter-9",
+    "chapter-10-traits-lib",
     "chapter-10a-generics",
     "chapter-10a-generics/rustlings",
     "chapter-10b-traits",

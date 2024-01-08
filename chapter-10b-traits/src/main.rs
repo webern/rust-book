@@ -1,5 +1,7 @@
 #![allow(dead_code, unused_variables, unused_mut, unused_imports)]
 
+use chapter_10_traits_lib::{Foo, NotMyStruct};
+
 ///! # Chapter 10b - Traits
 ///
 /// Traits are often called *interfaces* in other languages (like C++, Go and Java). Traits are
@@ -179,6 +181,11 @@ mod returning_generics_with_trait_bounds {
         "this is a displayable type"
     }
 
+    // kind like this
+    // fn something_displayable_2<T: Display>() -> T {
+    //     "this is a displayable type"
+    // }
+
     /// However, it can only return one type. It is like a generic `T` that cannot represent
     /// multiple types. The following will not compile.
     fn only_one_return_type_allowed() -> impl Display {
@@ -282,3 +289,28 @@ mod blanket_impls {
         MyType("abc".to_string()).add_and_print();
     }
 }
+
+pub struct MyStruct {}
+
+// We can implement a foreign Trait on our own type
+impl Foo for MyStruct {
+    fn foo(&self) -> String {
+        todo!()
+    }
+}
+
+pub trait MyTrait {
+    fn sldkjflkdsjf();
+}
+
+impl MyTrait for NotMyStruct {
+    fn sldkjflkdsjf() {
+        todo!()
+    }
+}
+
+// impl Foo for NotMyStruct {
+//     fn foo(&self) -> String {
+//         todo!()
+//     }
+// }
