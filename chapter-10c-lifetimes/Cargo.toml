@@ -1,5 +1,5 @@
 [package]
-name = "chapter-10c"
+name = "chapter-10c-lifetimes"
 version = "0.1.0"
 edition = "2021"
 
