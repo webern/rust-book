@@ -1,0 +1,10 @@
+[package]
+name = "chapter-9"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+eyre = "0.6"
+snafu = "0.7"
+thiserror = "1"
