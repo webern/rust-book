@@ -161,6 +161,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "chapter-12"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "tempfile",
+]
+
+[[package]]
 name = "chapter-3"
 version = "0.1.0"
 dependencies = [

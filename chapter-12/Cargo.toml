@@ -1,0 +1,12 @@
+[package]
+name = "chapter-12"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+tempfile = "3"
+
+[features]
+# The `integ` feature enables integration tests. These tests require docker to be running on the host.
+integ = []

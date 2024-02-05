@@ -22,4 +22,5 @@ members = [
     "chapter-10b-traits",
     "chapter-10c-lifetimes",
     "chapter-11",
+    "chapter-12",
 ]
