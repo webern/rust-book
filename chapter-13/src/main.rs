@@ -30,6 +30,9 @@ fn main() {
 
 /// # Closures
 ///
+/// This is an excellent blog post explaining how closures work:
+/// <https://rustyyato.github.io/rust/syntactic/sugar/2019/01/17/Closures-Magic-Functions.html>
+///
 /// **Definition**: Closures are anonymous functions you can save in a variable or pass as arguments
 /// to other functions.
 /// - Closures can capture variables from the surrounding environment.
