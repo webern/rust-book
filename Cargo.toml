@@ -25,4 +25,39 @@ members = [
     "chapter-12",
     "chapter-13",
     "chapter-13/rustlings",
+    "chapter-14",
 ]
+
+# Chapter 14, Profiles
+#
+# Release profiles allow you to send flags to the rustc compiler (which sends them to LLVM). The
+# profiles named "release" and "dev" (i.e. debug) are built-in and do what you would expect. You
+# can alter those, and you can add profiles with names of your own.
+#
+# See all profile options here: https://doc.rust-lang.org/cargo/reference/profiles.html
+#
+# On my machine the rust-book repo is in $REPOS, so these commands work
+#
+# cargo build --profile chapter-14-dev --manifest-path $REPOS/rust-book/chapter-14/Cargo.toml
+# ls -alh $REPOS/rust-book/target/chapter-14-dev
+#
+# Note the .dwp file!
+# cargo build --profile chapter-14-release --manifest-path $REPOS/rust-book/chapter-14/Cargo.toml
+# ls -alh $REPOS/rust-book/target/chapter-14-release
+#
+# Note: No .dwp file!
+# cargo build --release --manifest-path $REPOS/rust-book/chapter-14/Cargo.toml
+# ls -alh $REPOS/rust-book/target/release
+
+[profile.chapter-14-dev]
+inherits = "dev"
+opt-level = 1               # Use slightly better optimizations. (Defaults to 0 for dev)
+overflow-checks = false     # Disable integer overflow checks.
+
+[profile.chapter-14-release]
+inherits = "release"
+opt-level = "z"             # Optimize for binary size.
+debug = true                # Enable debug symbols, normally false for release builds.
+split-debuginfo = "packed"  # Place debug symbols adjacent to the binary.
+overflow-checks = false     # Do not panic on numeric overflow.
+panic = "abort"             # Do not unwind the stack, abort the program.
