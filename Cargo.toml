@@ -28,6 +28,8 @@ members = [
     "chapter-14",
     "chapter-15",
     "chapter-15/rustlings",
+    "chapter-16",
+    "chapter-16/rustlings",
 ]
 
 # Chapter 14, Profiles
