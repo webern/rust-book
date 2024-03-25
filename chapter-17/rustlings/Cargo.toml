@@ -1,5 +1,5 @@
 [package]
-name = "rustlings-chapter-17"
+name = "rustlings-chapter-16"
 description = "Small exercises to get you used to reading and writing Rust code!"
 version = "5.6.1"
 authors = [
