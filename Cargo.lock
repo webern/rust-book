@@ -204,6 +204,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "chapter-18"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+]
+
+[[package]]
 name = "chapter-3"
 version = "0.1.0"
 dependencies = [
@@ -826,24 +833,6 @@ dependencies = [
 
 [[package]]
 name = "rustlings-chapter-15"
-version = "5.6.1"
-dependencies = [
- "assert_cmd",
- "clap",
- "console",
- "glob",
- "home",
- "indicatif",
- "notify",
- "predicates",
- "regex",
- "serde",
- "serde_json",
- "toml",
-]
-
-[[package]]
-name = "rustlings-chapter-16"
 version = "5.6.1"
 dependencies = [
  "assert_cmd",
