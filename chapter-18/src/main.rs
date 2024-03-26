@@ -5,6 +5,9 @@
 */
 #![allow(dead_code, unused_variables, unused_mut)]
 
+use std::borrow::Cow;
+use std::ops::Deref;
+
 /// # Patterns and Matching
 ///
 /// ## Patterns
@@ -178,7 +181,14 @@ fn destructuring_structs() {
         _ => println!("no"),
     }
 
-    // @Bindings Oh My!
+    // With strings
+    let greeting = Some("Hello");
+    let name = "Bob";
+
+    match greeting {
+        Some("Hello") | Some("Hi") if name == "Bob" => println!("Yay"),
+        _ => println!("Boo"),
+    }
 }
 
 /// ## @ Bindings
@@ -286,6 +296,10 @@ fn destructuring() {
     for (index, value) in v.iter().enumerate() {
         println!("{} is at index {}", value, index);
     }
+
+    while let Some((index, value)) = v.iter().enumerate().next() {
+        println!("{} is at index {}", value, index);
+    }
 }
 
 /// ## Refutability
@@ -364,6 +378,29 @@ fn ranges() {
         'a'..='j' => println!("early ASCII letter"),
         'k'..='z' => println!("late ASCII letter"),
         _ => println!("something else"),
+    }
+
+    let result = String::from_utf8(vec![0u8, 1, 2]);
+    let x = String::from_utf8_lossy(&vec![0u8, 1, 2]);
+
+    fn take_str(s: &str) {
+        println!("{s}")
+    }
+
+    take_str(&x);
+    let owned = x.to_string();
+
+    let foo = Foo;
+    take_str(&foo);
+}
+
+struct Foo;
+
+impl Deref for Foo {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        "foo"
     }
 }
 
